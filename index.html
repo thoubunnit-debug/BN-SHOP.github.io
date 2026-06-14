@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BN SHOP</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- ─── HEADER ─── -->
+<header>
+  <div class="logo" onclick="navigate('home')">BN SHOP<span>.</span></div>
+  <nav>
+    <a class="nav-link active" onclick="navigate('home')">Home</a>
+    <a class="nav-link" onclick="navigate('shop')">Shop</a>
+    <a class="nav-link cart-link" onclick="navigate('cart')">
+      Cart
+      <span class="cart-badge" id="cartBadge">0</span>
+    </a>
+    <a class="nav-link" onclick="navigate('wishlist')">Wishlist</a>
+    <a class="nav-link" onclick="navigate('login')">Login</a>
+  </nav>
+  <div class="header-actions">
+    <button class="icon-btn" id="darkToggle" title="Toggle dark mode">🌙</button>
+    <button class="icon-btn hamburger" onclick="openMobileNav()">☰</button>
+  </div>
+</header>
+
+<!-- ─── MOBILE NAV ─── -->
+<div class="mobile-nav" id="mobileNav">
+  <button class="mobile-close" onclick="closeMobileNav()">✕</button>
+  <a onclick="navigate('home');closeMobileNav()">Home</a>
+  <a onclick="navigate('shop');closeMobileNav()">Shop</a>
+  <a onclick="navigate('cart');closeMobileNav()">Cart</a>
+  <a onclick="navigate('wishlist');closeMobileNav()">Wishlist</a>
+  <a onclick="navigate('login');closeMobileNav()">Login</a>
+</div>
+
+<!-- ─── HOME PAGE ─── -->
+<div class="page active" id="page-home">
+
+  <section class="hero">
+    <div class="hero-bg"></div>
+    <div class="hero-content">
+      <div class="hero-badge">✦ New Collection In 2026</div>
+      <h1>Wear What<br><em>Moves</em> You</h1>
+      <p>Your style, your story. Explore premium streetwear, everyday essentials, and standout pieces designed to help you look and feel your best.</p>
+      <div class="hero-ctas">
+        <button class="btn-primary" onclick="navigate('shop')">Shop the Collection</button>
+        <button class="btn-outline" onclick="navigate('wishlist')">View Wishlist</button>
+      </div>
+    </div>
+    <div class="hero-stats">
+      <div class="stat"><div class="stat-num">500+</div><div class="stat-label">Products</div></div>
+      <div class="stat"><div class="stat-num">48h</div><div class="stat-label">Shipping</div></div>
+      <div class="stat"><div class="stat-num">30d</div><div class="stat-label">Returns</div></div>
+    </div>
+  </section>
+
+  <div class="brands-bar">
+    <span class="brand-label">As seen in</span>
+    <div class="brands-list">
+      <span class="brand-name">Vogue</span>
+      <span class="brand-name">GQ</span>
+      <span class="brand-name">Elle</span>
+      <span class="brand-name">Harper's</span>
+      <span class="brand-name">Hypebeast</span>
+    </div>
+  </div>
+
+  <div class="section-header">
+    <h2>Trending <span>Now</span></h2>
+    <button class="see-all-btn" onclick="navigate('shop')">See all products →</button>
+  </div>
+
+  <div class="filters" id="homeFilters">
+    <button class="filter-btn active" data-filter="all">All</button>
+    <button class="filter-btn" data-filter="apparel">Apparel</button>
+    <button class="filter-btn" data-filter="shoes">Shoes</button>
+    <button class="filter-btn" data-filter="accessories">Accessories</button>
+  </div>
+
+  <div class="products" id="homeProducts"></div>
+
+  <div class="featured-banner">
+    <div class="banner-text">
+      <div class="banner-tag">Limited Drop</div>
+      <h2>The Leather Edit</h2>
+      <p>Premium leather bags and accessories, crafted for the modern wardrobe. Timeless meets now.</p>
+      <button class="btn-primary" onclick="navigate('shop')">Shop Leather</button>
+    </div>
+  </div>
+
+</div>
+
+<!-- ─── SHOP PAGE ─── -->
+<div class="page" id="page-shop">
+  <div class="section-header">
+    <h2>All <span>Products</span></h2>
+    <span id="shopCount" class="shop-count"></span>
+  </div>
+  <div class="search-wrap">
+    <div class="search-inner">
+      <span class="search-icon"></span>
+      <input type="text" id="searchInput" placeholder="Search products, brands...">
+    </div>
+  </div>
+  <div class="filters" id="shopFilters">
+    <button class="filter-btn active" data-filter="all">All</button>
+    <button class="filter-btn" data-filter="apparel">Apparel</button>
+    <button class="filter-btn" data-filter="shoes">Shoes</button>
+    <button class="filter-btn" data-filter="accessories">Accessories</button>
+  </div>
+  <div class="products" id="shopProducts"></div>
+</div>
+
+<!-- ─── CART PAGE ─── -->
+<div class="page" id="page-cart">
+  <div class="cart-page">
+    <h1 class="page-title">Your Cart</h1>
+    <div class="cart-layout">
+      <div id="cartItemsList"></div>
+      <div class="cart-summary" id="cartSummary">
+        <div class="summary-title">Order Summary</div>
+        <div class="summary-line"><span>Subtotal</span><span id="summarySubtotal">$0</span></div>
+        <div class="summary-line"><span>Shipping</span><span>Free</span></div>
+        <div class="summary-line"><span>Tax (10%)</span><span id="summaryTax">$0</span></div>
+        <hr class="summary-divider">
+        <div class="summary-total"><span>Total</span><span id="summaryTotal">$0</span></div>
+        <button class="checkout-btn" onclick="openQR()">Checkout & Pay →</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ─── WISHLIST PAGE ─── -->
+<div class="page" id="page-wishlist">
+  <div class="wishlist-page">
+    <h1 class="page-title">My Wishlist</h1>
+    <div class="products" id="wishlistProducts"></div>
+  </div>
+</div>
+
+<!-- ─── LOGIN PAGE ─── -->
+<div class="page" id="page-login">
+  <div class="login-page">
+    <div class="login-wrap">
+      <div class="login-box">
+        <div class="login-header">
+          <h2>Welcome back</h2>
+          <p>Sign in to your account</p>
+        </div>
+        <button class="social-btn">
+          <span>
+            G
+          </span> Continue with Google
+        </button>
+        <button class="social-btn">
+          <span>𝕏</span> Continue with X
+        </button>
+        <div class="login-divider">or sign in with email</div>
+        <div class="form-group">
+          <label class="form-label">Email address</label>
+          <input type="email" class="form-input" placeholder="you@example.com">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Password</label>
+          <input type="password" class="form-input" placeholder="••••••••">
+        </div>
+        <button class="login-btn" onclick="showToast('Logged in successfully!')">Sign In</button>
+        <div class="login-footer">
+          Don't have an account? <a onclick="showToast('Sign up coming soon!')">Create one</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ─── FOOTER ─── -->
+<footer>
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <div class="logo" onclick="navigate('home')">BN SHOP<span>.</span></div>
+      <p>Best fashion collection 2026. Style for every story, quality for every wardrobe.</p>
+    </div>
+    <div class="footer-col">
+      <h4>Shop</h4>
+      <a onclick="navigate('shop')">All Products</a>
+      <a>New Arrivals</a>
+      <a>Sale</a>
+      <a>Brands</a>
+    </div>
+    <div class="footer-col">
+      <h4>Help</h4>
+      <a>Shipping Info</a>
+      <a>Returns</a>
+      <a>Size Guide</a>
+      <a>Contact Us</a>
+    </div>
+    <div class="footer-col">
+      <h4>Follow</h4>
+      <a>Instagram</a>
+      <a>TikTok</a>
+      <a>Pinterest</a>
+      <a>YouTube</a>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>© 2026 Bunnit Store. All rights reserved.</span>
+    <div class="footer-links">
+      <a>Privacy</a>
+      <a>Terms</a>
+      <a>Cookies</a>
+    </div>
+  </div>
+</footer>
+
+<!-- ─── QR PAYMENT MODAL ─── -->
+<div class="qr-overlay" id="qrOverlay" onclick="closeQROutside(event)">
+  <div class="qr-box" id="qrBox">
+    <div class="qr-header">
+      <div class="qr-header-left">
+        <div>
+          <div class="qr-bank-name">ABA Bank</div>
+          <div class="qr-bank-sub">KHQR Payment</div>
+        </div>
+      </div>
+      <button class="qr-close-btn" onclick="closeQR()">✕</button>
+    </div>
+    <div class="qr-body">
+      <div class="qr-to">Pay to</div>
+      <div class="qr-name">Bunnit Store</div>
+      <div class="qr-phone">+855 61498512</div>
+      <div class="qr-amount-badge" id="qrAmount">$0.00</div>
+      <div class="qr-img-wrap">
+        <div class="qr-corner tl"></div>
+        <div class="qr-corner tr"></div>
+        <div class="qr-corner bl"></div>
+        <div class="qr-corner br"></div>
+        <img id="qrCodeImg" src="img/qr.jpg" alt="">
+      </div>
+      <div class="qr-scan-hint">Scan with <strong>ABA Mobile</strong> or any KHQR app</div>
+      <div class="qr-apps">
+        <span class="qr-app-badge">ABA Mobile</span>
+        <span class="qr-app-badge">ACLEDA</span>
+        <span class="qr-app-badge">Wing</span>
+        <span class="qr-app-badge">Pay Pal</span>
+      </div>
+      <button class="qr-confirm-btn" onclick="confirmPayment()">I've Completed Payment</button>
+      <div class="qr-footer-note">Payment is secure and processed instantly via KHQR</div>
+    </div>
+  </div>
+</div>
+
+<!-- ─── PRODUCT MODAL ─── -->
+<div class="modal-overlay" id="productModal" onclick="closeModal(event)">
+  <div class="modal-box">
+    <div class="modal-wrap">
+      <button class="modal-close" onclick="closeModal()">✕</button>
+      <img class="modal-img" id="modalImg" src="" alt="">
+      <div class="modal-content">
+        <div class="modal-cat" id="modalCat"></div>
+        <div class="modal-name" id="modalName"></div>
+        <div class="modal-pricing">
+          <span class="modal-price" id="modalPrice"></span>
+          <span class="modal-old-price" id="modalOld"></span>
+        </div>
+        <div class="modal-desc" id="modalDesc"></div>
+        <div class="modal-actions">
+          <button type="button" class="btn-primary" id="modalCartBtn">Add to Cart</button>
+          <button type="button" class="icon-btn" id="modalWishBtn">♡</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ─── TOAST ─── -->
+<div class="toast" id="toast">
+  <span class="toast-icon" id="toastIcon"></span>
+  <span id="toastMsg"></span>
+</div>
+
+<script src="java.js"></script>
+</body>
+</html>
