@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BN SHOP — Admin</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="admin.css">
+</head>
+<body>
+
+<!-- ─── LOGIN SCREEN ─── -->
+<div class="admin-login-screen" id="adminLogin">
+  <div class="login-panel">
+    <div class="login-panel-brand">
+      <div class="admin-logo">BN SHOP<span>.</span></div>
+      <div class="admin-logo-sub">Admin Panel</div>
+    </div>
+    <form id="adminLoginForm" class="login-form" autocomplete="off">
+      <div class="form-group">
+        <label class="form-label">Username</label>
+        <input type="text" class="form-input" id="loginUser" placeholder="admin" required>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Password</label>
+        <input type="password" class="form-input" id="loginPass" placeholder="••••••••" required>
+      </div>
+      <div class="login-error" id="loginError"></div>
+      <button type="submit" class="btn-primary full">Sign In</button>
+    </form>
+    <div class="login-hint">Demo credentials — Username: <b>admin</b> · Password: <b>admin123</b></div>
+  </div>
+</div>
+
+<!-- ─── ADMIN APP SHELL ─── -->
+<div class="admin-shell" id="adminShell">
+
+  <aside class="admin-sidebar">
+    <div class="admin-logo" onclick="showView('dashboard')">BN SHOP<span>.</span></div>
+    <div class="admin-logo-sub">Admin Panel</div>
+
+    <nav class="admin-nav">
+      <a class="admin-nav-link active" data-view="dashboard" onclick="showView('dashboard')">
+        <span class="nav-ico">◧</span> Dashboard
+      </a>
+      <a class="admin-nav-link" data-view="products" onclick="showView('products')">
+        <span class="nav-ico">▦</span> Products
+      </a>
+      <a class="admin-nav-link" data-view="orders" onclick="showView('orders')">
+        <span class="nav-ico">▤</span> Orders
+      </a>
+    </nav>
+
+    <div class="admin-sidebar-footer">
+      <div class="admin-user">
+        <div class="admin-user-avatar">A</div>
+        <div>
+          <div class="admin-user-name">Admin</div>
+          <div class="admin-user-role">Store Owner</div>
+        </div>
+      </div>
+      <button class="logout-btn" onclick="adminLogout()">Log Out</button>
+    </div>
+  </aside>
+
+  <main class="admin-main">
+
+    <!-- DASHBOARD -->
+    <section class="admin-view active" id="view-dashboard">
+      <div class="admin-topbar">
+        <div>
+          <h1>Dashboard</h1>
+          <p class="admin-sub">Store overview and performance</p>
+        </div>
+      </div>
+
+      <div class="stat-grid">
+        <div class="stat-card">
+          <div class="stat-card-label">Total Products</div>
+          <div class="stat-card-value" id="statProducts">0</div>
+        </div>
+        <div class="stat-card accent">
+          <div class="stat-card-label">New Orders</div>
+          <div class="stat-card-value" id="statNewOrders">0</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-card-label">Total Customers</div>
+          <div class="stat-card-value" id="statCustomers">0</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-card-label">Total Revenue</div>
+          <div class="stat-card-value" id="statRevenue">$0</div>
+        </div>
+        <div class="stat-card warn">
+          <div class="stat-card-label">Out of Stock</div>
+          <div class="stat-card-value" id="statOutOfStock">0</div>
+        </div>
+      </div>
+
+      <div class="panel">
+        <div class="panel-header">
+          <h2>Recent Orders</h2>
+          <button class="link-btn" onclick="showView('orders')">View all →</button>
+        </div>
+        <div class="table-wrap">
+          <table class="admin-table" id="recentOrdersTable">
+            <thead>
+              <tr><th>Order ID</th><th>Customer</th><th>Date</th><th>Total</th><th>Status</th></tr>
+            </thead>
+            <tbody id="recentOrdersBody"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- PRODUCTS -->
+    <section class="admin-view" id="view-products">
+      <div class="admin-topbar">
+        <div>
+          <h1>Products</h1>
+          <p class="admin-sub">Manage your product catalog</p>
+        </div>
+        <button class="btn-primary" onclick="openProductForm()">+ Add Product</button>
+      </div>
+
+      <div class="admin-toolbar">
+        <input type="text" id="productSearch" class="admin-search" placeholder="Search products...">
+        <select id="productCategoryFilter" class="admin-select" title="Filter products by category">
+          <option value="all">All Categories</option>
+          <option value="apparel">Apparel</option>
+          <option value="shoes">Shoes</option>
+          <option value="accessories">Accessories</option>
+        </select>
+      </div>
+
+      <div class="panel">
+        <div class="table-wrap">
+          <table class="admin-table">
+            <thead>
+              <tr><th></th><th>Name</th><th>Category</th><th>Price</th><th>Stock</th><th>Status</th><th></th></tr>
+            </thead>
+            <tbody id="productsBody"></tbody>
+          </table>
+        </div>
+        <div class="empty-state" id="productsEmpty" hidden>No products found.</div>
+      </div>
+    </section>
+
+    <!-- ORDERS -->
+    <section class="admin-view" id="view-orders">
+      <div class="admin-topbar">
+        <div>
+          <h1>Orders</h1>
+          <p class="admin-sub">Track and update customer orders</p>
+        </div>
+      </div>
+
+      <div class="admin-toolbar">
+        <input type="text" id="orderSearch" class="admin-search" placeholder="Search by customer or order ID...">
+        <select id="orderStatusFilter" class="admin-select" aria-label="Filter orders by status">
+          <option value="all">All Statuses</option>
+          <option value="Pending">Pending</option>
+          <option value="Completed">Completed</option>
+        </select>
+      </div>
+
+      <div class="panel">
+        <div class="table-wrap">
+          <table class="admin-table">
+            <thead>
+              <tr><th>Order ID</th><th>Customer</th><th>Phone</th><th>Date</th><th>Total</th><th>Status</th><th></th></tr>
+            </thead>
+            <tbody id="ordersBody"></tbody>
+          </table>
+        </div>
+        <div class="empty-state hidden" id="ordersEmpty">No orders yet.</div>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<!-- ─── PRODUCT FORM MODAL ─── -->
+<div class="modal-overlay" id="productFormModal" onclick="closeProductForm(event)">
+  <div class="modal-box admin-modal-box">
+    <div class="modal-wrap">
+      <button class="modal-close" onclick="closeProductForm()">✕</button>
+      <div class="modal-content">
+        <h2 class="modal-form-title" id="productFormTitle">Add Product</h2>
+        <form id="productForm">
+          <input type="hidden" id="pf-id">
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">Product Name</label>
+              <input type="text" class="form-input" id="pf-name" title="name" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="pf-category">Category</label>
+              <select class="form-input" id="pf-category" title="Product category" aria-label="Product category" required>
+                <option value="apparel">Apparel</option>
+                <option value="shoes">Shoes</option>
+                <option value="accessories">Accessories</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">Price ($)</label>
+              <input type="number" step="0.01" min="0" class="form-input" id="pf-price" title="Price in dollars" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Old Price ($, optional)</label>
+              <input type="number" step="0.01" min="0" class="form-input" id="pf-oldprice" title="oldprice in dollars" required>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">Stock Quantity</label>
+              <input type="number" step="1" min="0" class="form-input" id="pf-stock" title="Stock quantity in units" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Badge (optional)</label>
+              <input type="text" class="form-input" id="pf-badge" placeholder="e.g. New, Sale">
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Image URL</label>
+            <input type="text" class="form-input" id="pf-image" placeholder="https://..." required>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="pf-desc">Description</label>
+            <textarea class="form-input" id="pf-desc" rows="3" required></textarea>
+          </div>
+          <div class="modal-form-actions">
+            <button type="button" class="btn-outline dark" onclick="closeProductForm()">Cancel</button>
+            <button type="submit" class="btn-primary">Save Product</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ─── TOAST ─── -->
+<div class="toast" id="toast">
+  <span id="toastMsg"></span>
+</div>
+
+<script src="admin.js"></script>
+</body>
+</html>
